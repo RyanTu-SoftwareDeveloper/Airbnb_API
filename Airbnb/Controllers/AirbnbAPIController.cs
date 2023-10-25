@@ -1,4 +1,5 @@
 ﻿using Airbnb_API.Models;
+using Airbnb_API.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airbnb_API.Controllers
@@ -8,12 +9,12 @@ namespace Airbnb_API.Controllers
     public class AirbnbAPIController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<Airbnb> GetAirbnbs()
+        public IEnumerable<AirbnbDTO> GetAirbnbs()
         {
-            return new List<Airbnb>
+            return new List<AirbnbDTO>
             {
-                new Airbnb {Id=1, Name="Pool View"},
-                new Airbnb {Id=2, Name="Beach View"}
+                new AirbnbDTO {Id=1, Name="Pool View"},
+                new AirbnbDTO {Id=2, Name="Beach View"}
             };
         }
     }
