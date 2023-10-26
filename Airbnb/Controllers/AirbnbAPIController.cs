@@ -14,5 +14,15 @@ namespace Airbnb_API.Controllers
         {
             return AirbnbStore.AirbnbList;
         }
+        [HttpGet("id:int")]
+        public AirbnbDTO GetAirbnbs(int id)
+        {
+            return AirbnbStore.AirbnbList.FirstOrDefault(u=>u.Id==id);
+        }
     }
 }
+
+
+
+
+
