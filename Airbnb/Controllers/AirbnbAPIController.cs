@@ -21,12 +21,12 @@ namespace Airbnb_API.Controllers
             {
                 return BadRequest();
             }
-            var villa = AirbnbStore.AirbnbList.FirstOrDefault(u => u.Id == id);
-            if (villa == null)
+            var Airbnb = AirbnbStore.AirbnbList.FirstOrDefault(u => u.Id == id);
+            if (Airbnb == null)
             {
                 return NotFound();
             }
-            return Ok();
+            return Ok(Airbnb);
         }
     }
 }
