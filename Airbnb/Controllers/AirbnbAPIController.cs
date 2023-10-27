@@ -10,14 +10,23 @@ namespace Airbnb_API.Controllers
     public class AirbnbAPIController : ControllerBase
     {
         [HttpGet]
-        public IEnumerable<AirbnbDTO> GetAirbnbs()
+        public ActionResult<IEnumerable<AirbnbDTO>> GetAirbnbs()
         {
-            return AirbnbStore.AirbnbList;
+            return Ok(AirbnbStore.AirbnbList);
         }
         [HttpGet("id:int")]
-        public AirbnbDTO GetAirbnbs(int id)
+        public ActionResult<AirbnbDTO> GetAirbnbs(int id)
         {
-            return AirbnbStore.AirbnbList.FirstOrDefault(u=>u.Id==id);
+            if(id == 0)
+            {
+                return BadRequest();
+            }
+            var villa = AirbnbStore.AirbnbList.FirstOrDefault(u => u.Id == id);
+            if (villa == null)
+            {
+                return NotFound();
+            }
+            return Ok();
         }
     }
 }
