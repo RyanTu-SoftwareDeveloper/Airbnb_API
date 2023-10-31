@@ -10,11 +10,15 @@ namespace Airbnb_API.Controllers
     public class AirbnbAPIController : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<AirbnbDTO>> GetAirbnbs()
         {
             return Ok(AirbnbStore.AirbnbList);
         }
         [HttpGet("id:int")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<AirbnbDTO> GetAirbnbs(int id)
         {
             if(id == 0)
