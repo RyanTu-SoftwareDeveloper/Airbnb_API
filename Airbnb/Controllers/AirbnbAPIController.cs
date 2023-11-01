@@ -13,7 +13,7 @@ namespace Airbnb_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<AirbnbDTO>> GetAirbnbs()
         {
-            return Ok(AirbnbStore.AirbnbList);
+            return Ok(AirbnbStore.airbnbList);
         }
         [HttpGet("id:int")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -25,12 +25,32 @@ namespace Airbnb_API.Controllers
             {
                 return BadRequest();
             }
-            var Airbnb = AirbnbStore.AirbnbList.FirstOrDefault(u => u.Id == id);
+            var Airbnb = AirbnbStore.airbnbList.FirstOrDefault(u => u.Id == id);
             if (Airbnb == null)
             {
                 return NotFound();
             }
             return Ok(Airbnb);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<AirbnbDTO> CreateAirbnb([FromBody]AirbnbDTO airbnbDTO)
+        {
+            if(airbnbDTO == null)
+            {
+                return BadRequest(airbnbDTO);
+            }
+            if(airbnbDTO.Id > 0)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            airbnbDTO.Id = AirbnbStore.airbnbList.OrderByDescending(u=>u.Id).FirstOrDefault().Id+1;
+            AirbnbStore.airbnbList.Add(airbnbDTO);
+
+            return Ok(airbnbDTO);
         }
     }
 }
