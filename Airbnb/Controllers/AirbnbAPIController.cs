@@ -15,7 +15,7 @@ namespace Airbnb_API.Controllers
         {
             return Ok(AirbnbStore.airbnbList);
         }
-        [HttpGet("id:int")]
+        [HttpGet("{id:int}", Name = "GetAirbnbs")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -34,7 +34,7 @@ namespace Airbnb_API.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AirbnbDTO> CreateAirbnb([FromBody]AirbnbDTO airbnbDTO)
@@ -50,7 +50,7 @@ namespace Airbnb_API.Controllers
             airbnbDTO.Id = AirbnbStore.airbnbList.OrderByDescending(u=>u.Id).FirstOrDefault().Id+1;
             AirbnbStore.airbnbList.Add(airbnbDTO);
 
-            return Ok(airbnbDTO);
+            return CreatedAtRoute("GetAirbnbs", new { id = airbnbDTO.Id }, airbnbDTO);
         }
     }
 }
