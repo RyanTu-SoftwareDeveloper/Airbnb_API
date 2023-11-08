@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Airbnb_API.Controllers
 {
     [Route("api/AirbnbAPI")]
-    [ApiController]
+    //[ApiController]
     public class AirbnbAPIController : ControllerBase
     {
         [HttpGet]
@@ -39,6 +39,10 @@ namespace Airbnb_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<AirbnbDTO> CreateAirbnb([FromBody]AirbnbDTO airbnbDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if(airbnbDTO == null)
             {
                 return BadRequest(airbnbDTO);
