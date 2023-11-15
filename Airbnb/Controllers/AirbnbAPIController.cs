@@ -81,6 +81,23 @@ namespace Airbnb_API.Controllers
             AirbnbStore.airbnbList.Remove(airbnb);
             return NoContent();
         }
+
+        [HttpPut("{id:int}", Name = "UpdateAirbnb")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateAirbnb(int id, [FromBody]AirbnbDTO airbnbDTO)
+        {
+            if(airbnbDTO == null || id != airbnbDTO.Id)
+            {
+                return BadRequest();
+            }
+            var airbnb = AirbnbStore.airbnbList.FirstOrDefault(u => u.Id == id);
+            airbnb.Name = airbnbDTO.Name;
+            airbnb.Sqft = airbnbDTO.Sqft;
+            airbnb.Occupancy = airbnbDTO.Occupancy;
+
+            return NoContent();
+        }
     }
 }
 
