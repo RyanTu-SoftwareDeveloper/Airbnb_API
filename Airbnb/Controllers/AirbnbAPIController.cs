@@ -1,6 +1,7 @@
 ﻿using Airbnb_API.Data;
 using Airbnb_API.Models;
 using Airbnb_API.Models.DTO;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 
@@ -97,6 +98,29 @@ namespace Airbnb_API.Controllers
             airbnb.Occupancy = airbnbDTO.Occupancy;
 
             return NoContent();
+        }
+
+        [HttpPatch("{id:int}", Name = "UpdatePartialAirbnb")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePartialAirbnb(int id, JsonPatchDocument<AirbnbDTO> patchDTO) 
+        {
+            if (patchDTO == null || id == 0)
+            {
+                return BadRequest();
+            }
+            var airbnb = AirbnbStore.airbnbList.FirstOrDefault(u => u.Id == id);
+            if (airbnb == null)
+            {
+                return BadRequest();
+            }
+            patchDTO.ApplyTo(airbnb, ModelState);
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            return NoContent();
+
         }
     }
 }
