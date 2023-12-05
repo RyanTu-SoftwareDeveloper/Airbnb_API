@@ -2,7 +2,7 @@
 using Airbnb_API.Models;
 using Airbnb_API.Models.DTO;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;     
 using System.Reflection.Metadata.Ecma335;
 
 namespace Airbnb_API.Controllers
@@ -11,10 +11,20 @@ namespace Airbnb_API.Controllers
     [ApiController]
     public class AirbnbAPIController : ControllerBase
     {
+        private readonly ILogger<AirbnbAPIController> _logger;
+
+        public AirbnbAPIController(ILogger<AirbnbAPIController> logger)
+        {
+            _logger = logger;
+        }
+
+
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<AirbnbDTO>> GetAirbnbs()
         {
+            _logger.LogInformation("Getting all airbnb");
             return Ok(AirbnbStore.airbnbList);
         }
         [HttpGet("{id:int}", Name = "GetAirbnb")]
@@ -25,6 +35,7 @@ namespace Airbnb_API.Controllers
         {
             if(id == 0)
             {
+                _logger.LogError("Get airbnb error with Id" + id);
                 return BadRequest();
             }
             var airbnb = AirbnbStore.airbnbList.FirstOrDefault(u => u.Id == id);
