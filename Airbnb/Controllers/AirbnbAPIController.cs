@@ -1,4 +1,5 @@
 ﻿using Airbnb_API.Data;
+using Airbnb_API.Logging;
 using Airbnb_API.Models;
 using Airbnb_API.Models.DTO;
 using Microsoft.AspNetCore.JsonPatch;
@@ -11,9 +12,10 @@ namespace Airbnb_API.Controllers
     [ApiController]
     public class AirbnbAPIController : ControllerBase
     {
-        private readonly ILogger<AirbnbAPIController> _logger;
 
-        public AirbnbAPIController(ILogger<AirbnbAPIController> logger)
+        private readonly ILogging _logger;
+
+        public AirbnbAPIController(ILogging logger)
         {
             _logger = logger;
         }
@@ -24,7 +26,7 @@ namespace Airbnb_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<AirbnbDTO>> GetAirbnbs()
         {
-            _logger.LogInformation("Getting all airbnb");
+            _logger.Log("Getting all airbnb", "");
             return Ok(AirbnbStore.airbnbList);
         }
         [HttpGet("{id:int}", Name = "GetAirbnb")]
@@ -35,7 +37,7 @@ namespace Airbnb_API.Controllers
         {
             if(id == 0)
             {
-                _logger.LogError("Get airbnb error with Id" + id);
+                _logger.Log("Get airbnb error with Id" + id, "error");
                 return BadRequest();
             }
             var airbnb = AirbnbStore.airbnbList.FirstOrDefault(u => u.Id == id);
